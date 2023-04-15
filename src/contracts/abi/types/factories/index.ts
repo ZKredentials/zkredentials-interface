@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ERC721__factory } from "./ERC721__factory";
+export { ZKredentialsERC721__factory } from "./ZKredentialsERC721__factory";
