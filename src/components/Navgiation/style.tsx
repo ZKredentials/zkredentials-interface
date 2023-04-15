@@ -17,6 +17,8 @@ export const MailLogo = styled.div`
   margin-right: 10px;
 `;
 export const ChatContainer = styled.div`
+display: flex;
+flex-direction: column;
 position: absolute;
 width: 500px;
 border: 5px solid black;
@@ -26,16 +28,55 @@ left: 340px;
 top: 30px;
 background: white;
 z-index: 999;
-display: flex;
-flex-direction: row;
 align-items: center;
 justify-content: space-between;
 
 padding: 20px;
 `;
 export const Chat = styled.div`
-border: 5px solid black;
-padding 10px;
+width: 100%;
+border: 1px solid black;
+padding: 10px;
+margin: 2px 0px;
+border-radius: 5px;
+`
+export const ChatInput = styled.input`
+width: 100%;
+padding: 6px 12px;
+font-size: 16px;
+font-weight: 400;
+line-height: 1.5;
+color: #212529;
+background-color: #fff;
+background-clip: padding-box;
+border: 1px solid #ced4da;
+appearance: none;
+border-radius: 4px;
+transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+:focus{
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+}
+`
+export const ChatButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+  border-radius: 6px;
+  border: none;
+
+  color: #fff;
+  background: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+   background-origin: border-box;
+  box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 `
 export const NavigationContainer = styled.div`
   position: relative;

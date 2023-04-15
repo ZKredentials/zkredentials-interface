@@ -1,7 +1,9 @@
 import {
   Badge,
   Chat,
+  ChatButton,
   ChatContainer,
+  ChatInput,
   MailLogo,
   NavigationActionableSection,
   NavigationContainer,
@@ -30,6 +32,16 @@ const Navigation = () => {
   const [key, setKey] = useState("")
   useEffect(() => {
     async function createUser() {
+      let user
+      try {
+        if(wallet){
+          const user = await PushAPI.user.create({
+            account: wallet
+          });
+        }
+      } catch (error) {
+        console.log(error)
+      }
       try {
         if (wallet) {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -60,7 +72,7 @@ const Navigation = () => {
           // const response = await PushAPI.chat.send({
           //   messageContent: "Gm gm! It's me... Mario",
           //   messageType: 'Text',
-          //   receiverAddress: `eip155:0x126CE873371c15A664306a387cc2329F67Cc515b`,
+          //   receiverAddress: `eip155:0x63425a866FA081818d6Fc22cc7c354f765Dc1E4d`,
           //   signer: signer as any,
           //   pgpPrivateKey: decryptedPvtKey
           // });
@@ -137,8 +149,8 @@ const Navigation = () => {
             return <Chat>
               <div>from: {mail.msg.fromDID.slice(7)}</div>
               <div>msg: {mail.msg.messageContent}</div>
-              <input value={reply} onChange={(e) => setReply(e.target.value)}></input>
-              <button onClick={() => sendReply(mail)}>Reply</button>
+              <ChatInput placeholder="Enter reply here" value={reply} onChange={(e) => setReply(e.target.value)}></ChatInput>
+              <ChatButton onClick={() => sendReply(mail)}>Reply</ChatButton>
             </Chat>
           })}</ChatContainer>}
         {wallet && <WorldID />}
