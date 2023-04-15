@@ -13,9 +13,11 @@ import useGithubStats from "@/hooks/useGithubStats";
 import { useState } from "react";
 import { generateGithubProof } from "@/utils/api";
 import useGithubMint from "@/hooks/useGithubMint";
+import useUserProof from "@/hooks/useUserProof";
 
 const GithubStatistics = () => {
   const { data: stats, loading: fetchingStats } = useGithubStats();
+  const { data: userCid, fetchData: fetchNewUserProof } = useUserProof();
   const {
     transactionHash,
     error: githubMintingError,
@@ -26,9 +28,9 @@ const GithubStatistics = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [numOfPrs, setNumOfPrs] = useState<number>(0);
-  const [numOfStarred, setNumOfStarred] = useState<number>(0);
-  const [numOfSponsors, setNumOfSponsors] = useState<number>(0);
+  const [numOfPrs, setNumOfPrs] = useState<string>("");
+  const [numOfStarred, setNumOfStarred] = useState<string>("");
+  const [numOfSponsors, setNumOfSponsors] = useState<string>("");
 
   const [proofPrs, setProofPrs] = useState<boolean>(false);
   const [proofStarred, setProofStarred] = useState<boolean>(false);
@@ -39,9 +41,9 @@ const GithubStatistics = () => {
     setProofSponsors(false);
     setProofStarred(false);
 
-    setNumOfPrs(0);
-    setNumOfStarred(0);
-    setNumOfSponsors(0);
+    setNumOfPrs("");
+    setNumOfStarred("");
+    setNumOfSponsors("");
     clearMint();
   };
 
@@ -54,46 +56,47 @@ const GithubStatistics = () => {
       return;
     }
 
-    if (proofPrs && numOfPrs > stats.prs) {
+    if (proofPrs && Number(numOfPrs) > stats.prs) {
       setError("Threshold cannot exceed the numbers of PR you have");
       return;
     }
 
-    if (proofStarred && numOfStarred > stats.starred) {
+    if (proofStarred && Number(numOfStarred) > stats.starred) {
       setError("Threshold cannot exceed the numbers of Starred you have");
       return;
     }
 
-    if (proofSponsors && numOfSponsors > stats.sponsors) {
+    if (proofSponsors && Number(numOfSponsors) > stats.sponsors) {
       setError("Threshold cannot exceed the numbers of Sponsors you have");
       return;
     }
 
-    if (proofPrs && numOfPrs <= 0) {
+    if (proofPrs && Number(numOfPrs) <= 0) {
       setError("Threshold of PR must be a position value");
       return;
     }
 
-    if (proofStarred && numOfStarred <= 0) {
+    if (proofStarred && Number(numOfStarred) <= 0) {
       setError("Threshold of Starred must be a position value");
       return;
     }
 
-    if (proofSponsors && numOfSponsors <= 0) {
+    if (proofSponsors && Number(numOfSponsors) <= 0) {
       setError("Threshold of Sponsors must be a position value");
       return;
     }
 
     try {
       const { data: cid } = await generateGithubProof(
-        numOfSponsors,
-        numOfStarred,
-        numOfPrs,
+        Number(numOfSponsors),
+        Number(numOfStarred),
+        Number(numOfPrs),
         proofPrs,
         proofStarred,
         proofSponsors
       );
-      await replaceProof(cid as string);
+      await submitProof(cid as string);
+      await fetchNewUserProof();
       clearData();
     } catch (error) {
       setError("Something went wrong with submitting proof. Please try again.");
@@ -111,46 +114,48 @@ const GithubStatistics = () => {
       return;
     }
 
-    if (proofPrs && numOfPrs > stats.prs) {
+    if (proofPrs && Number(numOfPrs) > stats.prs) {
       setError("Threshold cannot exceed the numbers of PR you have");
       return;
     }
 
-    if (proofStarred && numOfStarred > stats.starred) {
+    if (proofStarred && Number(numOfStarred) > stats.starred) {
       setError("Threshold cannot exceed the numbers of Starred you have");
       return;
     }
 
-    if (proofSponsors && numOfSponsors > stats.sponsors) {
+    if (proofSponsors && Number(numOfSponsors) > stats.sponsors) {
       setError("Threshold cannot exceed the numbers of Sponsors you have");
       return;
     }
 
-    if (proofPrs && numOfPrs <= 0) {
+    if (proofPrs && Number(numOfPrs) <= 0) {
       setError("Threshold of PR must be a position value");
       return;
     }
 
-    if (proofStarred && numOfStarred <= 0) {
+    if (proofStarred && Number(numOfStarred) <= 0) {
       setError("Threshold of Starred must be a position value");
       return;
     }
 
-    if (proofSponsors && numOfSponsors <= 0) {
+    if (proofSponsors && Number(numOfSponsors) <= 0) {
       setError("Threshold of Sponsors must be a position value");
       return;
     }
 
     try {
       const { data: cid } = await generateGithubProof(
-        numOfSponsors,
-        numOfStarred,
-        numOfPrs,
+        Number(numOfSponsors),
+        Number(numOfStarred),
+        Number(numOfPrs),
         proofPrs,
         proofStarred,
         proofSponsors
       );
-      await submitProof(cid as string);
+      await replaceProof(cid as string);
+      console.log("After replacement");
+      await fetchNewUserProof();
       clearData();
     } catch (error) {
       setError("Something went wrong with submitting proof. Please try again.");
@@ -176,6 +181,7 @@ const GithubStatistics = () => {
               <GithubStatisticsInputContainer>
                 <input
                   type="checkbox"
+                  checked={proofPrs}
                   onChange={(e) => setProofPrs(e.target.checked)}
                 />
               </GithubStatisticsInputContainer>
@@ -183,7 +189,8 @@ const GithubStatistics = () => {
               <GithubStatisticsInputContainer>
                 <GithubStatisticsTextInput
                   type="number"
-                  onChange={(e) => setNumOfPrs(+e.target.value)}
+                  value={numOfPrs}
+                  onChange={(e) => setNumOfPrs(e.target.value)}
                 />
               </GithubStatisticsInputContainer>
             </GithubStatisticsRow>
@@ -193,6 +200,7 @@ const GithubStatistics = () => {
               <GithubStatisticsInputContainer>
                 <input
                   type="checkbox"
+                  checked={proofStarred}
                   onChange={(e) => setProofStarred(e.target.checked)}
                 />
               </GithubStatisticsInputContainer>
@@ -200,7 +208,8 @@ const GithubStatistics = () => {
               <GithubStatisticsInputContainer>
                 <GithubStatisticsTextInput
                   type="number"
-                  onChange={(e) => setNumOfStarred(+e.target.value)}
+                  value={numOfStarred}
+                  onChange={(e) => setNumOfStarred(e.target.value)}
                 />
               </GithubStatisticsInputContainer>
             </GithubStatisticsRow>
@@ -210,6 +219,7 @@ const GithubStatistics = () => {
               <GithubStatisticsInputContainer>
                 <input
                   type="checkbox"
+                  checked={proofSponsors}
                   onChange={(e) => setProofSponsors(e.target.checked)}
                 />
               </GithubStatisticsInputContainer>
@@ -217,7 +227,8 @@ const GithubStatistics = () => {
               <GithubStatisticsInputContainer>
                 <GithubStatisticsTextInput
                   type="number"
-                  onChange={(e) => setNumOfSponsors(+e.target.value)}
+                  value={numOfSponsors}
+                  onChange={(e) => setNumOfSponsors(e.target.value)}
                 />
               </GithubStatisticsInputContainer>
             </GithubStatisticsRow>
@@ -229,8 +240,11 @@ const GithubStatistics = () => {
         type="button"
         onClick={() => {
           if (!loading) {
-            // TODO Find a way to decide which generate
-            handleGenerate();
+            if (userCid) {
+              handleReplace();
+            } else {
+              handleGenerate();
+            }
           }
         }}
         disabled={loading}
