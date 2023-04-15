@@ -8,6 +8,8 @@ const config = {
     process.env.NEXT_PUBLIC_WORLDCOIN_CONTRACT_ADDRESS || "",
   GITHUB_CONTRACT_ADDRESS:
     process.env.NEXT_PUBLIC_GITHUB_CONTRACT_ADDRESS || "",
+  TWITTER_CONTRACT_ADDRESS:
+    process.env.NEXT_PUBLIC_TWITTER_CONTRACT_ADDRESS || "",
 };
 
 export default config;

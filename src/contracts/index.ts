@@ -1,5 +1,4 @@
 import config from "@/utils/config";
-import ERC721 from "./abi/ERC721.json";
 import { ethers } from "ethers";
 
 /**
