@@ -1,3 +1,5 @@
 export const LOCAL_STORAGE_GITHUB_CODE = "LOCAL_STORAGE_GITHUB_CODE";
 export const LOCAL_STORAGE_GITHUB_ACCESS_TOKEN =
   "LOCAL_STORAGE_GITHUB_ACCESS_TOKEN";
+
+export const BACKEND_BASE_URL = "https://zkcredentials.onrender.com";
