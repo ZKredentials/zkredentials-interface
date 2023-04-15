@@ -5,6 +5,10 @@ import { ethers } from "ethers";
 import { ZKredentialsWorldID__factory } from "@/contracts/abi/types";
 import { UPDATE_WORLDID_VERIFIED } from "@/context/actionType";
 import { useWorldID } from "@/context/WorldIDContext";
+import ChainToAddressMapping, {
+  ContractName,
+} from "@/utils/chainToAdressMapping";
+import { ChainIdToChainName } from "@/utils/chains";
 
 const useCheckRegisteredUser = () => {
   const { state } = useMetaMask();
@@ -29,8 +33,15 @@ const useCheckRegisteredUser = () => {
         return;
       }
 
+      if (!state.chainId) {
+        return;
+      }
+      const currentContractAddress =
+        ChainToAddressMapping[ChainIdToChainName[state.chainId]][
+          ContractName.WORLDID
+        ];
       const contract = ZKredentialsWorldID__factory.connect(
-        config.WORLDCOIN_CONTRACT_ADDRESS,
+        currentContractAddress,
         provider
       );
       if (!contract) {

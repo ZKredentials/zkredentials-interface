@@ -3,6 +3,10 @@ import { useState } from "react";
 import { useMetaMask } from "./useMetamask";
 import { Contract, ethers } from "ethers";
 import { ZKredentialsGitHub__factory } from "@/contracts/abi/types";
+import ChainToAddressMapping, {
+  ContractName,
+} from "@/utils/chainToAdressMapping";
+import { ChainIdToChainName } from "@/utils/chains";
 
 const INSUFFICIENT_FUNDS_ERROR_CODE = "INSUFFICIENT_FUNDS";
 
@@ -96,8 +100,15 @@ const useGithubMint = () => {
 
     const signer = provider.getSigner();
 
+    if (!state.chainId) {
+      return;
+    }
+    const currentContractAddress =
+      ChainToAddressMapping[ChainIdToChainName[state.chainId]][
+        ContractName.GITHUB
+      ];
     const contract = ZKredentialsGitHub__factory.connect(
-      config.GITHUB_CONTRACT_ADDRESS,
+      currentContractAddress,
       signer
     );
     if (!contract) {
@@ -177,8 +188,15 @@ const useGithubMint = () => {
 
     const signer = provider.getSigner();
 
+    if (!state.chainId) {
+      return;
+    }
+    const currentContractAddress =
+      ChainToAddressMapping[ChainIdToChainName[state.chainId]][
+        ContractName.GITHUB
+      ];
     const contract = ZKredentialsGitHub__factory.connect(
-      config.GITHUB_CONTRACT_ADDRESS,
+      currentContractAddress,
       signer
     );
     if (!contract) {
