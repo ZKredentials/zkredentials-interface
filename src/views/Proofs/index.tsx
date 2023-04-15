@@ -8,7 +8,7 @@ const Proofs = () => {
   return (
     <ProofsContainer>
       <ProofsTitle>Proofs</ProofsTitle>
-      <ProofCard cid={state.cid || ""} />
+      {state.cid && <ProofCard cid={state.cid || ""} />}
     </ProofsContainer>
   );
 };

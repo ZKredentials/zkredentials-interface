@@ -66,7 +66,7 @@ const ProofView: FC<IProps> = ({ cid }) => {
     }
 
     if (data?.sponsors) {
-      const sponsor_response = await get(data.sponsors, "sponsorsProof.json");
+      const sponsor_response = await get(data.sponsors, "sponsorProof.json");
       setSponsorsProofDetails(JSON.stringify(sponsor_response.proof));
     }
   };
@@ -84,7 +84,9 @@ const ProofView: FC<IProps> = ({ cid }) => {
   return (
     <ProofViewContainer>
       {loading ? (
-        <ProofViewText>Loading...</ProofViewText>
+        <ProofViewContent>
+          <ProofViewText>Loading...</ProofViewText>
+        </ProofViewContent>
       ) : (
         <ProofViewContent>
           {data?.prs && (
@@ -126,7 +128,7 @@ const ProofView: FC<IProps> = ({ cid }) => {
               <ProofViewText>
                 You have at least {data?.sponsorsThreshold} Sponsors
               </ProofViewText>
-              {viewMoreStarred ? (
+              {viewMoreSponsors ? (
                 <ProofViewProofDetail
                   onClick={() => setViewMoreSponsors(false)}
                 >
