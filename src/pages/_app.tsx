@@ -1,4 +1,5 @@
 import { MetamaskSdkLayout } from "@/components/MetamaskSdkLayout";
+import { WorldIDProvider } from "@/context/WorldIDContext";
 import { MetaMaskProvider } from "@/hooks/useMetamask";
 
 import GlobalStyle from "@/styles/GlobalStyles";
@@ -46,8 +47,10 @@ export default function App({ Component, pageProps }: AppProps) {
       `}</style>
       <MetaMaskProvider>
         <MetamaskSdkLayout>
-          <GlobalStyle />
-          <Component {...pageProps} />
+          <WorldIDProvider>
+            <GlobalStyle />
+            <Component {...pageProps} />
+          </WorldIDProvider>
         </MetamaskSdkLayout>
       </MetaMaskProvider>
     </>

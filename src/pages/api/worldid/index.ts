@@ -38,7 +38,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 
     return res.json(response.data.success);
   } catch (error: any) {
-    console.log("Error from WorldID API", error);
+    console.log("test1", error.response);
+    console.log("test2", error.response?.data);
+    console.log("test3", error.response?.data?.code);
+    if (error.response?.data?.code.includes("already_verified")) {
+      return res.json(true);
+    }
+
     return res.status(500);
   }
 };

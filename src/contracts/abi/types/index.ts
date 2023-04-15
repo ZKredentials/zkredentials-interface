@@ -3,6 +3,10 @@
 /* eslint-disable */
 export type { ERC721 } from "./ERC721";
 export type { ZKredentialsERC721 } from "./ZKredentialsERC721";
+export type { ZKredentialsGitHub } from "./ZKredentialsGitHub";
+export type { ZKredentialsWorldCoin } from "./ZKredentialsWorldCoin";
 export * as factories from "./factories";
 export { ERC721__factory } from "./factories/ERC721__factory";
 export { ZKredentialsERC721__factory } from "./factories/ZKredentialsERC721__factory";
+export { ZKredentialsGitHub__factory } from "./factories/ZKredentialsGitHub__factory";
+export { ZKredentialsWorldCoin__factory } from "./factories/ZKredentialsWorldCoin__factory";

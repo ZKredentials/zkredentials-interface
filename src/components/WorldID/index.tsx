@@ -5,6 +5,9 @@ import Image from "next/image";
 import WorldIDIcon from "@/assets/images/WorldId.svg";
 import { WorldIDLogo, WorldIdContainer, WorldIdText } from "./style";
 import { useState } from "react";
+import useRegisterUser from "@/hooks/useRegisterUser";
+import useCheckRegisteredUser from "@/hooks/useCheckRegisteredUser";
+import { useWorldID } from "@/context/WorldIDContext";
 
 const IDKitWidget = dynamic(
   () => import("@worldcoin/idkit").then((mod) => mod.IDKitWidget),
@@ -15,10 +18,26 @@ const VerificationAction = "Sign In WorldID";
 const VerificationSignal = "Verification with WORLDID";
 
 const WorldID = () => {
-  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { state: WorldIDState } = useWorldID();
+
+  const {
+    transactionHash,
+    error,
+    loading: isRegistering,
+    register,
+  } = useRegisterUser();
+
+  useCheckRegisteredUser();
 
   const app_id = "app_staging_80251b57de090b576b3c8c1d0eab9cfd";
+
+  const handleRegister = async () => {
+    await register();
+  };
+
   const handleVerify = async (verificationResponse: VerificationResponse) => {
+    setLoading(true);
     const response = await axios.post("http://localhost:3000/api/worldid", {
       app_id,
       nullifier_hash: verificationResponse.nullifier_hash,
@@ -28,38 +47,62 @@ const WorldID = () => {
       verificationSignal: VerificationSignal,
     });
 
-    // TODO -> from the success, trigger a signing proof process
-    console.log("response from frontend", response.data);
-  };
+    if (response.data) {
+      await handleRegister();
+    }
 
-  // TODO Include smart contract call to check whether is it verified
+    setLoading(false);
+  };
 
   return (
     <>
-      {isVerified ? (
+      {loading ? (
         <WorldIdContainer>
           <WorldIDLogo>
             <Image src={WorldIDIcon} alt="World Id Icon" fill />
           </WorldIDLogo>
-          <WorldIdText>Verified</WorldIdText>
+          <WorldIdText>Verifying</WorldIdText>
         </WorldIdContainer>
       ) : (
-        <IDKitWidget
-          app_id={app_id} // obtain this from developer.worldcoin.org
-          action={VerificationAction}
-          signal={VerificationSignal}
-          enableTelemetry
-          onSuccess={(result) => handleVerify(result)} // pass the proof to the API or your smart contract
-        >
-          {({ open }) => (
-            <WorldIdContainer onClick={open}>
+        <>
+          {transactionHash ? (
+            <WorldIdContainer>
               <WorldIDLogo>
                 <Image src={WorldIDIcon} alt="World Id Icon" fill />
               </WorldIDLogo>
-              <WorldIdText>Verify with World ID</WorldIdText>
+              <WorldIdText>Verified</WorldIdText>
             </WorldIdContainer>
+          ) : (
+            <>
+              {WorldIDState.isVerified ? (
+                <WorldIdContainer>
+                  <WorldIDLogo>
+                    <Image src={WorldIDIcon} alt="World Id Icon" fill />
+                  </WorldIDLogo>
+                  <WorldIdText>Verified</WorldIdText>
+                </WorldIdContainer>
+              ) : (
+                <IDKitWidget
+                  app_id={app_id} // obtain this from developer.worldcoin.org
+                  action={VerificationAction}
+                  signal={VerificationSignal}
+                  action_description="Verify with WorldID for generation for Zkredentials"
+                  enableTelemetry
+                  onSuccess={(result) => handleVerify(result)} // pass the proof to the API or your smart contract
+                >
+                  {({ open }) => (
+                    <WorldIdContainer onClick={open}>
+                      <WorldIDLogo>
+                        <Image src={WorldIDIcon} alt="World Id Icon" fill />
+                      </WorldIDLogo>
+                      <WorldIdText>Verify with World ID</WorldIdText>
+                    </WorldIdContainer>
+                  )}
+                </IDKitWidget>
+              )}
+            </>
           )}
-        </IDKitWidget>
+        </>
       )}
     </>
   );
