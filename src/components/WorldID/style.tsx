@@ -11,6 +11,7 @@ export const WorldIdContainer = styled.button`
 
   padding: 10px 15px;
   border-radius: 15px;
+  border: none;
 `;
 
 export const WorldIDLogo = styled.div`
