@@ -1,3 +1,4 @@
+import GithubLogin from "@/components/GithubLogin";
 import { HomeViewContainer, HomeViewText, HomeViewTitle } from "./style";
 
 const HomeView = () => {

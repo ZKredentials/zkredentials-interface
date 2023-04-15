@@ -15,7 +15,7 @@ const VerificationAction = "Sign In WorldID";
 const VerificationSignal = "Verification with WORLDID";
 
 const WorldID = () => {
-  const [isVerified, setIsVerified] = useState<boolean>(true);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
 
   const app_id = "app_staging_80251b57de090b576b3c8c1d0eab9cfd";
   const handleVerify = async (verificationResponse: VerificationResponse) => {

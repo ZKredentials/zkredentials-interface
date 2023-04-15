@@ -1,20 +1,14 @@
 import styled from "styled-components";
+import { DefaultCardContainer } from "../style";
 
-export const HomeViewContainer = styled.div`
-  position: relative;
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-`;
+export const HomeViewContainer = styled(DefaultCardContainer)``;
 
 export const HomeViewTitle = styled.h2`
   position: relative;
   font-size: 32px;
   font-weight: 700;
+
+  margin-bottom: 10px;
 `;
 
 export const HomeViewText = styled.p`
