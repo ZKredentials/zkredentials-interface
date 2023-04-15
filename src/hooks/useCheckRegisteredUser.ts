@@ -17,14 +17,14 @@ const useCheckRegisteredUser = () => {
     setLoading(true);
     try {
       if (!state.wallet) {
-        WorldIDDispatch({ type: UPDATE_WORLDID_VERIFIED, isVerified: true });
+        WorldIDDispatch({ type: UPDATE_WORLDID_VERIFIED, isVerified: false });
         setError("User has yet to connect wallet.");
         return;
       }
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       if (!provider) {
-        WorldIDDispatch({ type: UPDATE_WORLDID_VERIFIED, isVerified: true });
+        WorldIDDispatch({ type: UPDATE_WORLDID_VERIFIED, isVerified: false });
         setError("Provider does not exist.");
         return;
       }
@@ -34,7 +34,7 @@ const useCheckRegisteredUser = () => {
         provider
       );
       if (!contract) {
-        WorldIDDispatch({ type: UPDATE_WORLDID_VERIFIED, isVerified: true });
+        WorldIDDispatch({ type: UPDATE_WORLDID_VERIFIED, isVerified: false });
         setError("Contract does not exist.");
         return;
       }
@@ -47,7 +47,7 @@ const useCheckRegisteredUser = () => {
       });
     } catch (error) {
       console.log("Error from fetchUserNFTLimit", error);
-      WorldIDDispatch({ type: UPDATE_WORLDID_VERIFIED, isVerified: true });
+      WorldIDDispatch({ type: UPDATE_WORLDID_VERIFIED, isVerified: false });
       setError(
         "Something went wrong with fetching user minting limits. Please refresh the page."
       );

@@ -81,3 +81,27 @@ export const GithubStatisticsError = styled.p`
   font-size: 400;
   color: ${theme.colors.warning};
 `;
+
+export const GithubStatisticsButton = styled.button`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: ${theme.colors.title};
+
+  padding: 10px 15px;
+  border-radius: 15px;
+
+  height: 44px;
+  max-width: 200px;
+
+  cursor: pointer;
+  border: none;
+
+  & p {
+    color: ${theme.colors.backgroundTwo};
+    font-weight: 700;
+  }
+`;

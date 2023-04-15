@@ -8,6 +8,8 @@ import { useState } from "react";
 import useRegisterUser from "@/hooks/useRegisterUser";
 import useCheckRegisteredUser from "@/hooks/useCheckRegisteredUser";
 import { useWorldID } from "@/context/WorldIDContext";
+import { generateWorldIdProof } from "@/utils/api";
+import { useMetaMask } from "@/hooks/useMetamask";
 
 const IDKitWidget = dynamic(
   () => import("@worldcoin/idkit").then((mod) => mod.IDKitWidget),
@@ -18,8 +20,10 @@ const VerificationAction = "Sign In WorldID";
 const VerificationSignal = "Verification with WORLDID";
 
 const WorldID = () => {
+  const { state } = useMetaMask();
   const [loading, setLoading] = useState<boolean>(false);
   const { state: WorldIDState } = useWorldID();
+  const { fetchData } = useCheckRegisteredUser();
 
   const {
     transactionHash,
@@ -32,25 +36,29 @@ const WorldID = () => {
 
   const app_id = "app_staging_80251b57de090b576b3c8c1d0eab9cfd";
 
-  const handleRegister = async () => {
-    await register(
-      "bafybeibqk22mstve2oeccz223kje7bj34s7xojmv25pt4ow2bm5l3anyty"
-    );
+  const handleRegister = async (address: string) => {
+    const cid = await generateWorldIdProof(address);
+    console.log("cid for worldcoin", cid);
+    await register(cid.data as string);
+    await fetchData();
   };
 
   const handleVerify = async (verificationResponse: VerificationResponse) => {
     setLoading(true);
-    const response = await axios.post("http://localhost:3000/api/worldid", {
-      app_id,
-      nullifier_hash: verificationResponse.nullifier_hash,
-      proof: verificationResponse.proof,
-      merkle_root: verificationResponse.merkle_root,
-      verificationAction: VerificationAction,
-      verificationSignal: VerificationSignal,
-    });
 
-    if (response.data) {
-      await handleRegister();
+    if (state.wallet) {
+      const response = await axios.post("http://localhost:3000/api/worldid", {
+        app_id,
+        nullifier_hash: verificationResponse.nullifier_hash,
+        proof: verificationResponse.proof,
+        merkle_root: verificationResponse.merkle_root,
+        verificationAction: VerificationAction,
+        verificationSignal: VerificationSignal,
+      });
+
+      if (response.data) {
+        await handleRegister(state.wallet);
+      }
     }
 
     setLoading(false);

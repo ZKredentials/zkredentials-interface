@@ -66,7 +66,7 @@ const useRegisterUser = () => {
     const signer = provider.getSigner();
 
     const contract = ZKredentialsWorldID__factory.connect(
-      config.CONTRACT_ADDRESS,
+      config.WORLDCOIN_CONTRACT_ADDRESS,
       signer
     );
     if (!contract) {
@@ -81,7 +81,7 @@ const useRegisterUser = () => {
       state.wallet,
       cid
     );
-    console.log("transactionOptions", transactionOptions);
+
     try {
       const tx = await contract.mint(cid, transactionOptions);
 

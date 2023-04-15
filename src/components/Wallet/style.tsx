@@ -10,8 +10,6 @@ export const WalletContainer = styled.div<{
   align-items: center;
   justify-content: space-between;
 
-  background-color: ${theme.colors.title};
-
   padding: 10px 15px;
   border-radius: 15px;
 

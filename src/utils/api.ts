@@ -55,14 +55,56 @@ export const getGithubStats = async (): Promise<IResponse> => {
 export const generateGithubProof = async (
   sponsors: number,
   starred: number,
-  prs: number
+  prs: number,
+  showPrs: boolean,
+  showStarred: boolean,
+  showSponsors: boolean
 ): Promise<IResponse> => {
   try {
+    // construct request body
+    const requestBody: { [key: string]: number } = {};
+
+    if (showPrs) {
+      requestBody["prs"] = prs;
+    }
+
+    if (showStarred) {
+      requestBody["starred"] = starred;
+    }
+
+    if (showSponsors) {
+      requestBody["sponsors"] = sponsors;
+    }
+
+    console.log("requestbod", requestBody);
     const response = await axios.post(`${BACKEND_BASE_URL}/generate`, {
       token: localStorage.getItem(LOCAL_STORAGE_GITHUB_ACCESS_TOKEN),
-      sponsors,
-      starred,
-      prs,
+      ...requestBody,
+    });
+    if (response.status === 200) {
+      return {
+        data: response.data.cid as string,
+        success: true,
+      };
+    }
+    return {
+      data: "",
+      success: false,
+    };
+  } catch (error) {
+    return {
+      data: "",
+      success: false,
+    };
+  }
+};
+
+export const generateWorldIdProof = async (
+  address: string
+): Promise<IResponse> => {
+  try {
+    const response = await axios.post(`${BACKEND_BASE_URL}/generateworld`, {
+      address,
     });
     if (response.status === 200) {
       return {
