@@ -4,7 +4,6 @@ import { MetaMaskProvider } from "@/hooks/useMetamask";
 import GlobalStyle from "@/styles/GlobalStyles";
 import type { AppProps } from "next/app";
 
-import { Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 const sfPro = localFont({
