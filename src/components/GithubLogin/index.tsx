@@ -14,12 +14,13 @@ import { useSocials } from "@/context/SocialsContext";
 import { UPDATE_GITHUB_LOGGEDIN } from "@/context/actionType";
 
 const GithubLogin = () => {
+  let githubWindow;
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
-  const { dispatch } = useSocials();
+  const { state, dispatch } = useSocials();
 
   const handleLogin = async () => {
-    window.open(
+    githubWindow = window.open(
       `${BACKEND_BASE_URL}/github/login`,
       `_blank`,
       `height=500,width=800`
@@ -31,9 +32,8 @@ const GithubLogin = () => {
     if (token) {
       setLoggedIn(true);
       dispatch({ type: UPDATE_GITHUB_LOGGEDIN, isGithub: true });
-      // TODO: Check whether is token still valid
     }
-  }, []);
+  }, [state.isGithub]);
 
   return (
     <GithubLoginContainer type="button" onClick={handleLogin}>

@@ -154,7 +154,6 @@ const GithubStatistics = () => {
         proofSponsors
       );
       await replaceProof(cid as string);
-      console.log("After replacement");
       await fetchNewUserProof();
       clearData();
     } catch (error) {

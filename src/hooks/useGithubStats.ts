@@ -15,7 +15,6 @@ const useGithubStats = () => {
   const fetchGithubStats = async () => {
     setLoading(true);
     const response = await getGithubStats();
-    console.log("github stats", response);
     if (response.success) {
       setData(response.data as IBaseStats);
       setError("");
