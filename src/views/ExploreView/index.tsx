@@ -12,6 +12,7 @@ import { useMetaMask } from "@/hooks/useMetamask";
 import * as PushAPI from "@pushprotocol/restapi";
 import { Chat, ChatButton, ChatContainer, ChatInput } from "@/components/Navgiation/style";
 import { ethers } from "ethers";
+import { getDisplayAddress } from "@/utils/helper";
 type User = {
   cid: string
   id: string
@@ -76,7 +77,7 @@ const ExplorerView = ({signing}: any) => {
               showMsg(!msg)
               setUser(user)
             }}>
-              {user.id}
+              {getDisplayAddress(user?.id, 4, false)}
             </User>
           })
         }
