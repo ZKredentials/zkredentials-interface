@@ -73,7 +73,7 @@ const ExplorerView = ({signing}: any) => {
         {
           users.filter(users => users.id.toLowerCase() !== (wallet || "").toLowerCase()).map((user: any) => {
             return <User onClick={() => {
-              showMsg(true)
+              showMsg(!msg)
               setUser(user)
             }}>
               {user.id}
