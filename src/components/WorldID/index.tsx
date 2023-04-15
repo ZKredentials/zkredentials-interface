@@ -33,7 +33,9 @@ const WorldID = () => {
   const app_id = "app_staging_80251b57de090b576b3c8c1d0eab9cfd";
 
   const handleRegister = async () => {
-    await register("");
+    await register(
+      "bafybeibqk22mstve2oeccz223kje7bj34s7xojmv25pt4ow2bm5l3anyty"
+    );
   };
 
   const handleVerify = async (verificationResponse: VerificationResponse) => {

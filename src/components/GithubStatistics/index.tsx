@@ -1,4 +1,3 @@
-import useGithubGenerate from "@/hooks/useGithubGenerate";
 import {
   GithubStatisticsInputContainer,
   GithubStatisticsContainer,
@@ -14,12 +13,6 @@ import { useState } from "react";
 import { generateGithubProof } from "@/utils/api";
 
 const GithubStatistics = () => {
-  const {
-    data: cid,
-    loading,
-    error: generationError,
-    generate,
-  } = useGithubGenerate();
   const { data: stats, loading: fetchingStats } = useGithubStats();
   const [error, setError] = useState<string>("");
 

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { DefaultCardContainer } from "../style";
+import theme from "@/styles/theme";
 
 export const HomeViewContainer = styled(DefaultCardContainer)``;
 
@@ -9,6 +10,7 @@ export const HomeViewTitle = styled.h2`
   font-weight: 700;
 
   margin-bottom: 10px;
+  color: ${theme.colors.title};
 `;
 
 export const HomeViewText = styled.p`

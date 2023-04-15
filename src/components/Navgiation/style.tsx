@@ -14,11 +14,26 @@ export const NavigationContainer = styled.div`
   padding: 20px;
 `;
 
+export const NavigationLogoContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+export const NavigationLogoImage = styled.div`
+  position: relative;
+  height: 25px;
+  width: 25px;
+  margin-right: 5px;
+`;
+
 export const NavigationLogo = styled.h2`
   position: relative;
   font-size: 24px;
   font-weight: 700;
-  color: ${theme.colors.title};
+  color: ${theme.colors.logo};
 `;
 
 export const NavigationActionableSection = styled.div`
