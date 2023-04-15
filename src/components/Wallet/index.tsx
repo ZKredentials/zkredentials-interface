@@ -1,7 +1,8 @@
 import { useMetaMask } from "@/hooks/useMetamask";
-import { WalletContainer } from "./style";
+import { WalletContainer, WalletContainerButton } from "./style";
 import { useListen } from "@/hooks/useListen";
 import { ChainNameToChainId } from "@/utils/chains";
+import { getDisplayAddress } from "@/utils/helper";
 
 const Wallet = () => {
   const {
@@ -57,29 +58,32 @@ const Wallet = () => {
   };
 
   return (
-    <WalletContainer>
-      {showInstallMetaMask && <p>Please install Metamask</p>}
-      {isConnected && (
-        <>
-          {rightNetwork ? (
-            <>
-              <p>Connected: {wallet}</p>
-              <button type="button" onClick={handleDisconnect}>
-                Disconnect
-              </button>
-            </>
-          ) : (
-            <>
+    <WalletContainer type={rightNetwork ? "normal" : "warning"}>
+      {showInstallMetaMask && <p>No metamask detected</p>}
+
+      <WalletContainerButton
+        onClick={() => {
+          if (isConnected && rightNetwork) {
+            handleDisconnect();
+          }
+        }}
+      >
+        {isConnected && (
+          <>
+            {rightNetwork ? (
+              <p>{getDisplayAddress(wallet, 4, false)}</p>
+            ) : (
               <p>Wrong network</p>
-            </>
-          )}
-        </>
-      )}
-      {showConnectButton && (
-        <button type="button" onClick={handleConnect}>
-          Connect Wallet
-        </button>
-      )}
+            )}
+          </>
+        )}
+
+        {showConnectButton && (
+          <div onClick={handleConnect}>
+            <p>Connect Wallet</p>
+          </div>
+        )}
+      </WalletContainerButton>
     </WalletContainer>
   );
 };

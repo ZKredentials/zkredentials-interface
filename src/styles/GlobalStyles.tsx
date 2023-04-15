@@ -1,14 +1,15 @@
 import { createGlobalStyle } from "styled-components";
+import theme from "./theme";
 
 const GlobalStyle = createGlobalStyle`
   html,
   body {
     padding: 0;
     margin: 0;
-    font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
-      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     max-width: 100vw;
     overflow-x: hidden;
+
+    background: ${theme.colors.backgroundOne}
   }
 
   a {
@@ -16,7 +17,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
-    font-family: 'Roboto', sans-serif;
     box-sizing: border-box;
     padding: 0;
     margin: 0;

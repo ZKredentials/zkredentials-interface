@@ -1,7 +1,7 @@
 import { generateGithubProof } from "@/utils/api";
 import { useState } from "react";
 
-const useGithubStats = () => {
+const useGithubGenerate = () => {
   const [data, setData] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -20,7 +20,7 @@ const useGithubStats = () => {
     setLoading(false);
   };
 
-  return { data, loading, error, generateGithubProof };
+  return { data, loading, error, generate };
 };
 
-export default useGithubStats;
+export default useGithubGenerate;
