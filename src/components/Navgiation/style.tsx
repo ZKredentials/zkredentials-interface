@@ -25,7 +25,7 @@ export const NavigationLogoContainer = styled.div`
 export const NavigationLogoImage = styled.div`
   position: relative;
   height: 25px;
-  width: 25px;
+  width: 23.68px;
   margin-right: 5px;
 `;
 
