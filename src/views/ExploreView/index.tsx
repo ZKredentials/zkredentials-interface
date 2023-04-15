@@ -72,8 +72,8 @@ const ExplorerView = ({signing}: any) => {
       <ExplorerViewTitle>Explorer - {signing && "Ready to send messages"}</ExplorerViewTitle>
       <ExplorerViewContent>
         {
-          users.filter(users => users.id.toLowerCase() !== (wallet || "").toLowerCase()).map((user: any) => {
-            return <User onClick={() => {
+          users.filter(users => users.id.toLowerCase() !== (wallet || "").toLowerCase()).map((user: any, id) => {
+            return <User key={id} onClick={() => {
               showMsg(!msg)
               setUser(user)
             }}>
