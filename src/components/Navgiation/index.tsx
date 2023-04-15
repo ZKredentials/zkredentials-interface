@@ -115,8 +115,8 @@ const Navigation = ({signing}: any) => {
           <Image src={Mail} alt="Mail" fill />
           {mails.filter(mail => mail.msg.fromDID.slice(7).toLowerCase() !== wallet?.toLowerCase()).length > 0  && <Badge>{mails.filter(mail => mail.msg.fromDID.slice(7).toLowerCase() !== wallet?.toLowerCase()).length}</Badge>}
         </MailLogo>
-        {viewChats && mails.filter(mail => mail.msg.fromDID.slice(7).toLowerCase() !== wallet?.toLowerCase()).length > 0 && <ChatContainer>{mails.filter(mail => mail.msg.fromDID.slice(7).toLowerCase() !== wallet?.toLowerCase()).map(mail => {
-            return <Chat>
+        {viewChats && mails.filter(mail => mail.msg.fromDID.slice(7).toLowerCase() !== wallet?.toLowerCase()).length > 0 && <ChatContainer>{mails.filter(mail => mail.msg.fromDID.slice(7).toLowerCase() !== wallet?.toLowerCase()).map((mail, i) => {
+            return <Chat key={i}>
               <div>from: {mail.msg.fromDID.slice(7)}</div>
               <div>msg: {mail.msg.messageContent}</div>
               <ChatInput placeholder="Enter reply here" value={reply} onChange={(e) => setReply(e.target.value)}></ChatInput>

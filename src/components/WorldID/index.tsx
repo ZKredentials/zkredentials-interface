@@ -12,9 +12,9 @@ import { generateWorldIdProof } from "@/utils/api";
 import { useMetaMask } from "@/hooks/useMetamask";
 
 const IDKitWidget = dynamic(
-  () => import("@worldcoin/idkit").then((mod) => mod.IDKitWidget),
+  () => import("@worldcoin/idkit" as any).then((mod) => mod.IDKitWidget),
   { ssr: false }
-);
+) as any
 
 const VerificationAction = "Sign In WorldID";
 const VerificationSignal = "Verification with WORLDID";
@@ -98,9 +98,9 @@ const WorldID = () => {
                   signal={VerificationSignal}
                   action_description="Verify with WorldID for generation for Zkredentials"
                   enableTelemetry
-                  onSuccess={(result) => handleVerify(result)} // pass the proof to the API or your smart contract
+                  onSuccess={(result: any) => handleVerify(result)} // pass the proof to the API or your smart contract
                 >
-                  {({ open }) => (
+                  {({ open }: {open: any}) => (
                     <WorldIdContainer onClick={open}>
                       <WorldIDLogo>
                         <Image src={WorldIDIcon} alt="World Id Icon" fill />
