@@ -3,6 +3,7 @@ import {
   BACKEND_BASE_URL,
   LOCAL_STORAGE_GITHUB_ACCESS_TOKEN,
 } from "./constants";
+import { getIpfsUrl, isIpfsCid } from "./helper";
 
 export interface IBaseStats {
   sponsors: number;
@@ -112,6 +113,38 @@ export const generateWorldIdProof = async (
         success: true,
       };
     }
+    return {
+      data: "",
+      success: false,
+    };
+  } catch (error) {
+    return {
+      data: "",
+      success: false,
+    };
+  }
+};
+
+export const getIpfsData = async (cid: string): Promise<any> => {
+  try {
+    if (!isIpfsCid(cid)) {
+      return {
+        data: "",
+        success: false,
+      };
+    }
+
+    const url = getIpfsUrl(cid);
+    const response = await axios.get(`${url}/resume.json`);
+
+    if (response.status === 200) {
+      console.log("here", response.data);
+      return {
+        data: response.data,
+        success: true,
+      };
+    }
+
     return {
       data: "",
       success: false,
