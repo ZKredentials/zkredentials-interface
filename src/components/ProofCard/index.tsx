@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const ProofCard: FC<IProps> = ({ cid }) => {
-  const url = `http://localhost:3000/${cid}`;
+  const url = `http://localhost:3000/proof/${cid}`;
 
   const copyToClipboard = () => {
     if (window) {

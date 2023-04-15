@@ -138,7 +138,6 @@ export const getIpfsData = async (cid: string): Promise<any> => {
     const response = await axios.get(`${url}/resume.json`);
 
     if (response.status === 200) {
-      console.log("here", response.data);
       return {
         data: response.data,
         success: true,
