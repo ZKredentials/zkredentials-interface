@@ -47,7 +47,7 @@ const WorldID = () => {
     setLoading(true);
 
     if (state.wallet) {
-      const response = await axios.post("http://localhost:3000/api/worldid", {
+      const response = await axios.post("https://zkredentials-interface.vercel.app/api/worldid", {
         app_id,
         nullifier_hash: verificationResponse.nullifier_hash,
         proof: verificationResponse.proof,
