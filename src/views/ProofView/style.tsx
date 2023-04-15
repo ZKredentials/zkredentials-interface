@@ -15,7 +15,7 @@ export const ProofViewContainer = styled.div`
 
 export const ProofViewContent = styled.div`
   position: relative;
-  margin: 50px;
+  width: 500px;
   padding: 20px;
   background-color: ${theme.colors.backgroundTwo};
   border-radius: 15px;
@@ -26,10 +26,26 @@ export const ProofViewContent = styled.div`
   justify-content: flex-start;
 `;
 
+export const ProofViewSection = styled.div`
+  width: 100%;
+  margin: 5px 0;
+`;
+
 export const ProofViewText = styled.p`
   position: relative;
   dispay: block;
   font-size: 24px;
   font-weight: 400;
   color: ${theme.colors.text};
+`;
+
+export const ProofViewTextSeeMore = styled.p`
+  font-size: 14px;
+  cursor: pointer;
+`;
+
+export const ProofViewProofDetail = styled.code`
+  position: relative;
+  background-color: ${theme.colors.highlightTwo};
+  overflow-wrap: break-word;
 `;

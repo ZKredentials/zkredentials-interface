@@ -125,7 +125,10 @@ export const generateWorldIdProof = async (
   }
 };
 
-export const getIpfsData = async (cid: string): Promise<any> => {
+export const getIpfsData = async (
+  cid: string,
+  fileName: string
+): Promise<any> => {
   try {
     if (!isIpfsCid(cid)) {
       return {
@@ -135,7 +138,7 @@ export const getIpfsData = async (cid: string): Promise<any> => {
     }
 
     const url = getIpfsUrl(cid);
-    const response = await axios.get(`${url}/resume.json`);
+    const response = await axios.get(`${url}/${fileName}`);
 
     if (response.status === 200) {
       return {
