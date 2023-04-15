@@ -20,66 +20,36 @@ import * as PushAPI from "@pushprotocol/restapi";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Mail from "@/assets/images/mail.svg";
-import { ENV } from "@pushprotocol/restapi/src/lib/constants";
 
-const Navigation = () => {
+const Navigation = ({signing}: any) => {
   const {
     state: { wallet },
   } = useMetaMask();
   const [mails, setMails] = useState<PushAPI.IFeeds[]>([])
   const [viewChats, setViewChats] = useState(false)
   const [reply, setReply] = useState("")
-  const [key, setKey] = useState("")
+
   useEffect(() => {
     async function createUser() {
-      let user
       try {
-        if(wallet){
-          const user = await PushAPI.user.create({
-            account: wallet
-          });
-        }
-      } catch (error) {
-        console.log(error)
-      }
-      try {
-        if (wallet) {
+        if (wallet && signing) {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           if (!provider) {
             return;
           }
-          const signer = provider.getSigner();
-          const user = await PushAPI.user.get({
-            account: wallet
-          });
-          const decryptedPvtKey = await PushAPI.chat.decryptPGPKey({
-            encryptedPGPPrivateKey: user.encryptedPrivateKey,
-            signer: signer as any
-          });
-          setKey(decryptedPvtKey)
           const chats = await PushAPI.chat.chats({
             account: `eip155:${wallet}`,
             toDecrypt: true,
-            pgpPrivateKey: decryptedPvtKey
+            pgpPrivateKey: signing
           });
           const requests = await PushAPI.chat.requests({
             account: `eip155:${wallet}`, // user address in CAIP
-            pgpPrivateKey: decryptedPvtKey,
+            pgpPrivateKey: signing,
             toDecrypt: true
           });
           setMails([...chats, ...requests])
-          console.log(chats, requests)
-          // const response = await PushAPI.chat.send({
-          //   messageContent: "Gm gm! It's me... Mario",
-          //   messageType: 'Text',
-          //   receiverAddress: `eip155:0x63425a866FA081818d6Fc22cc7c354f765Dc1E4d`,
-          //   signer: signer as any,
-          //   pgpPrivateKey: decryptedPvtKey
-          // });
-          // console.log(response)
         } else {
           setMails([])
-          setKey("")
           setReply("")
         } 
       } catch (error) {
@@ -87,7 +57,7 @@ const Navigation = () => {
       }
     }
     createUser()
-  }, [wallet])
+  }, [wallet, signing])
 
   async function sendReply(chat: PushAPI.IFeeds) {
     if (wallet){
@@ -113,16 +83,16 @@ const Navigation = () => {
           messageType: 'Text',
           receiverAddress: chat.msg.fromDID,
           signer: signer as any,
-          pgpPrivateKey: key
+          pgpPrivateKey: signing
         });
         const chats = await PushAPI.chat.chats({
           account: `eip155:${wallet}`,
           toDecrypt: true,
-          pgpPrivateKey: key
+          pgpPrivateKey: signing
         });
         const requests = await PushAPI.chat.requests({
           account: `eip155:${wallet}`, // user address in CAIP
-          pgpPrivateKey: key,
+          pgpPrivateKey: signing,
           toDecrypt: true
         });
         setMails([...chats, ...requests])
