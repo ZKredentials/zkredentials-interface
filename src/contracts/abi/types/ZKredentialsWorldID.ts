@@ -27,22 +27,23 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface ZKredentialsWorldCoinInterface extends utils.Interface {
+export interface ZKredentialsWorldIDInterface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mint(address,uint256)": FunctionFragment;
+    "mint(string)": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "register()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setTokenURI(uint256,string)": FunctionFragment;
+    "setTokenURI(string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
+    "tokenId()": FunctionFragment;
+    "tokenURI()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
   };
@@ -56,14 +57,15 @@ export interface ZKredentialsWorldCoinInterface extends utils.Interface {
       | "mint"
       | "name"
       | "ownerOf"
-      | "register"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
       | "setTokenURI"
       | "supportsInterface"
       | "symbol"
-      | "tokenURI"
+      | "tokenId"
+      | "tokenURI()"
+      | "tokenURI(uint256)"
       | "transferFrom"
   ): FunctionFragment;
 
@@ -85,14 +87,13 @@ export interface ZKredentialsWorldCoinInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "mint",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
-  encodeFunctionData(functionFragment: "register", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     values: [
@@ -116,15 +117,20 @@ export interface ZKredentialsWorldCoinInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setTokenURI",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(functionFragment: "tokenId", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "tokenURI",
+    functionFragment: "tokenURI()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokenURI(uint256)",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -149,7 +155,6 @@ export interface ZKredentialsWorldCoinInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
@@ -171,7 +176,12 @@ export interface ZKredentialsWorldCoinInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "tokenId", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "tokenURI()", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenURI(uint256)",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
     data: BytesLike
@@ -246,12 +256,12 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface ZKredentialsWorldCoin extends BaseContract {
+export interface ZKredentialsWorldID extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ZKredentialsWorldCoinInterface;
+  interface: ZKredentialsWorldIDInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -308,8 +318,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ): Promise<[boolean]>;
 
     mint(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
+      cid: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -325,10 +334,6 @@ export interface ZKredentialsWorldCoin extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
-
-    register(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
 
     /**
      * See {IERC721-safeTransferFrom}.
@@ -361,8 +366,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setTokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
-      _tokenURI: PromiseOrValue<string>,
+      cid: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -379,10 +383,14 @@ export interface ZKredentialsWorldCoin extends BaseContract {
      */
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
+    tokenId(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "tokenURI()"(overrides?: CallOverrides): Promise<[string]>;
+
     /**
      * See {IERC721Metadata-tokenURI}.
      */
-    tokenURI(
+    "tokenURI(uint256)"(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
@@ -433,8 +441,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
   ): Promise<boolean>;
 
   mint(
-    to: PromiseOrValue<string>,
-    tokenId: PromiseOrValue<BigNumberish>,
+    cid: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -450,10 +457,6 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
-
-  register(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   /**
    * See {IERC721-safeTransferFrom}.
@@ -486,8 +489,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setTokenURI(
-    tokenId: PromiseOrValue<BigNumberish>,
-    _tokenURI: PromiseOrValue<string>,
+    cid: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -504,10 +506,14 @@ export interface ZKredentialsWorldCoin extends BaseContract {
    */
   symbol(overrides?: CallOverrides): Promise<string>;
 
+  tokenId(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "tokenURI()"(overrides?: CallOverrides): Promise<string>;
+
   /**
    * See {IERC721Metadata-tokenURI}.
    */
-  tokenURI(
+  "tokenURI(uint256)"(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
@@ -557,11 +563,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mint(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    mint(cid: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
 
     /**
      * See {IERC721Metadata-name}.
@@ -575,8 +577,6 @@ export interface ZKredentialsWorldCoin extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
-
-    register(overrides?: CallOverrides): Promise<void>;
 
     /**
      * See {IERC721-safeTransferFrom}.
@@ -609,8 +609,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ): Promise<void>;
 
     setTokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
-      _tokenURI: PromiseOrValue<string>,
+      cid: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -627,10 +626,14 @@ export interface ZKredentialsWorldCoin extends BaseContract {
      */
     symbol(overrides?: CallOverrides): Promise<string>;
 
+    tokenId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "tokenURI()"(overrides?: CallOverrides): Promise<string>;
+
     /**
      * See {IERC721Metadata-tokenURI}.
      */
-    tokenURI(
+    "tokenURI(uint256)"(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
@@ -731,8 +734,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ): Promise<BigNumber>;
 
     mint(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
+      cid: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -747,10 +749,6 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    register(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     /**
@@ -784,8 +782,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ): Promise<BigNumber>;
 
     setTokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
-      _tokenURI: PromiseOrValue<string>,
+      cid: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -802,10 +799,14 @@ export interface ZKredentialsWorldCoin extends BaseContract {
      */
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
+    tokenId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "tokenURI()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     /**
      * See {IERC721Metadata-tokenURI}.
      */
-    tokenURI(
+    "tokenURI(uint256)"(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -857,8 +858,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     mint(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
+      cid: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -873,10 +873,6 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ownerOf(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    register(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     /**
@@ -910,8 +906,7 @@ export interface ZKredentialsWorldCoin extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setTokenURI(
-      tokenId: PromiseOrValue<BigNumberish>,
-      _tokenURI: PromiseOrValue<string>,
+      cid: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -928,10 +923,14 @@ export interface ZKredentialsWorldCoin extends BaseContract {
      */
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    tokenId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "tokenURI()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     /**
      * See {IERC721Metadata-tokenURI}.
      */
-    tokenURI(
+    "tokenURI(uint256)"(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

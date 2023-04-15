@@ -13,6 +13,7 @@ export const GenerateProofViewTitle = styled.h2`
 
 export const GenerateProofViewContent = styled.div`
   position: relative;
+  width: 100%;
 
   display: flex;
   flex-wrap: wrap;

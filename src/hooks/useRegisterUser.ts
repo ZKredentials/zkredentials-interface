@@ -2,7 +2,7 @@ import config from "@/utils/config";
 import { useState } from "react";
 import { useMetaMask } from "./useMetamask";
 import { Contract, ethers } from "ethers";
-import { ZKredentialsWorldCoin__factory } from "@/contracts/abi/types";
+import { ZKredentialsWorldID__factory } from "@/contracts/abi/types";
 
 const INSUFFICIENT_FUNDS_ERROR_CODE = "INSUFFICIENT_FUNDS";
 
@@ -14,12 +14,13 @@ const useRegisterUser = () => {
 
   const prepareTransactonOption = async (
     contract: Contract,
-    account: string
+    account: string,
+    cid: string
   ) => {
     let estimatedGas = 200000;
 
     try {
-      const estimatedGasFromContract = await contract.estimateGas.register({
+      const estimatedGasFromContract = await contract.estimateGas.mint(cid, {
         from: account,
       });
       estimatedGas = estimatedGasFromContract.mul(11).div(10).toNumber();
@@ -39,10 +40,16 @@ const useRegisterUser = () => {
     };
   };
 
-  const register = async () => {
+  const register = async (cid: string) => {
     if (!state.wallet) {
       setTransactionHash("");
       setError("User has yet to connect wallet.");
+      return;
+    }
+
+    if (!cid) {
+      setTransactionHash("");
+      setError("No cid");
       return;
     }
 
@@ -58,7 +65,7 @@ const useRegisterUser = () => {
 
     const signer = provider.getSigner();
 
-    const contract = ZKredentialsWorldCoin__factory.connect(
+    const contract = ZKredentialsWorldID__factory.connect(
       config.CONTRACT_ADDRESS,
       signer
     );
@@ -71,11 +78,12 @@ const useRegisterUser = () => {
     // Prepare transaction options
     const transactionOptions = await prepareTransactonOption(
       contract,
-      state.wallet
+      state.wallet,
+      cid
     );
     console.log("transactionOptions", transactionOptions);
     try {
-      const tx = await contract.register(transactionOptions);
+      const tx = await contract.mint(cid, transactionOptions);
 
       const receipt = await tx.wait();
       const txnHash = await receipt.transactionHash;
@@ -98,7 +106,7 @@ const useRegisterUser = () => {
         // Internal Error Code from Smart Contract
         // Error use Smart Contract error messages
         let filteredMessage =
-          "Reigstering user went wrong. Please refresh and try again.";
+          "Registering user went wrong. Please refresh and try again.";
         if (error.message.length > 20) {
           filteredMessage = error.error.message.substring(33);
         }

@@ -10,6 +10,7 @@ const useGithubGenerate = () => {
     setLoading(true);
     const response = await generateGithubProof(sponsors, starred, prs);
     if (response.success) {
+      console.log("response", response);
       setData(response.data as string);
       setError("");
       return;

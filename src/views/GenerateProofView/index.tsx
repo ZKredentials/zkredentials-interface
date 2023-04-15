@@ -4,13 +4,16 @@ import {
   GenerateProofViewContent,
   GenerateProofViewTitle,
 } from "./style";
+import { useSocials } from "@/context/SocialsContext";
 
 const GenerateProofView = () => {
+  const { state } = useSocials();
+
   return (
     <GenerateProofViewContainer>
       <GenerateProofViewTitle>Generate Proof</GenerateProofViewTitle>
       <GenerateProofViewContent>
-        <GithubStatistics />
+        {state.isGithub && <GithubStatistics />}
       </GenerateProofViewContent>
     </GenerateProofViewContainer>
   );

@@ -10,10 +10,13 @@ import {
 import Image from "next/image";
 import GithubIcon from "@/assets/images/Github.svg";
 import { useEffect, useState } from "react";
+import { useSocials } from "@/context/SocialsContext";
+import { UPDATE_GITHUB_LOGGEDIN } from "@/context/actionType";
 
 const GithubLogin = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
+  const { dispatch } = useSocials();
 
   const handleLogin = async () => {
     window.open(
@@ -27,7 +30,7 @@ const GithubLogin = () => {
     const token = localStorage.getItem(LOCAL_STORAGE_GITHUB_ACCESS_TOKEN);
     if (token) {
       setLoggedIn(true);
-
+      dispatch({ type: UPDATE_GITHUB_LOGGEDIN, isGithub: true });
       // TODO: Check whether is token still valid
     }
   }, []);

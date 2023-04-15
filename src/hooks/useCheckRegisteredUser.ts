@@ -2,7 +2,7 @@ import config from "@/utils/config";
 import { useEffect, useState } from "react";
 import { useMetaMask } from "./useMetamask";
 import { ethers } from "ethers";
-import { ZKredentialsWorldCoin__factory } from "@/contracts/abi/types";
+import { ZKredentialsWorldID__factory } from "@/contracts/abi/types";
 import { UPDATE_WORLDID_VERIFIED } from "@/context/actionType";
 import { useWorldID } from "@/context/WorldIDContext";
 
@@ -29,7 +29,7 @@ const useCheckRegisteredUser = () => {
         return;
       }
 
-      const contract = ZKredentialsWorldCoin__factory.connect(
+      const contract = ZKredentialsWorldID__factory.connect(
         config.WORLDCOIN_CONTRACT_ADDRESS,
         provider
       );

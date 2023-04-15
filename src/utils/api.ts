@@ -66,7 +66,7 @@ export const generateGithubProof = async (
     });
     if (response.status === 200) {
       return {
-        data: response.data as string,
+        data: response.data.cid as string,
         success: true,
       };
     }
